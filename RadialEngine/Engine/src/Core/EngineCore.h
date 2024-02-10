@@ -42,23 +42,18 @@ private:
 	class FontLoader* fontLoader;
 
 	//Frame rate related
-	const int maxFPS = 144;//60 120 144
-	double lastFrameTime;
-	Uint64 m_TicksCount;
-	Uint32 fpsTimerStart;
-	Uint32 frameCount;
-	Uint32 frameDelay;
-	int lockFPS;
-	// Timing related
-	static float m_deltaTime;
-	float targetDeltaTime;
+	float frameDelay;
+	int frameStart;
+	float deltaTime;
+	const int maxFPS = 120;
+	int currentTime = 0;
 
 public:
 	const Uint8* keyState;
 	InputHandler* GetInputHandler() const { { return InputHandler::GetInstance(); } }
 	static EngineCore* GetInstance() { return  m_engine = (m_engine != nullptr) ? m_engine : new EngineCore(); }
 
-	float GetDeltaTime() const { return m_deltaTime; }
+	float GetDeltaTime() const { return deltaTime; }
 	bool GetIsRunning() { return isRunning; }
 	void SetIsRunning(bool isRunning) { this->isRunning = isRunning; }
 	void GetWindow() { gameWindow->GetWindow(); }
@@ -70,19 +65,7 @@ private:
 
 	void DisplayFPS()//In header file to allow for a cleaner cpp file
 	{
-		Uint64 currentTicks = SDL_GetTicks();//GetTicks() returns the number of milliseconds since the SDL library initialization.
-		frameCount++;
 
-		if (currentTicks - fpsTimerStart >= 1000) //If one second has passed
-		{
-			float elapsedSeconds = static_cast<float>(currentTicks - fpsTimerStart) / 1000.0f; //Convert milliseconds to seconds
-			float actualFPS = frameCount / elapsedSeconds;//Calculate the FPS
-			roundedFPS = static_cast<int>(actualFPS);
-			//Logger::Display("FPS: " + std::to_string(roundedFPS));
-
-			fpsTimerStart = currentTicks; //Reset the FPS timer
-			frameCount = 0;//Reset the FPS counter
-		}
 	}
 	///Logger::Issue("m_dt " + std::to_string(m_deltaTime));
 	///Logger::Warning("tdt " + std::to_string(targetDeltaTime));

@@ -218,15 +218,16 @@ void Renderer::CheckQuads(const glm::vec2& position, const glm::vec2& size, uint
 	rData.IndexCount += 6;
 }
 
-void Renderer::CheckQuads(const glm::vec2& position, const glm::vec2& size, uint32_t textureID, const Vector2D& scale)
+void Renderer::CheckQuads(const glm::vec2& position, const glm::vec2& size, uint32_t textureID, const Vector2D& renderSize, const std::array<Vector2D, 4>& UVs, float rotationAngle)
 {
+	// Check if the buffer is full
 	if (rData.IndexCount >= maxIndices || rData.textureSlotIndex > maxTextures - 1)
 	{
-		RenderEnd();
-		CleanBinds();
-		RenderStart();
+		RenderEnd(); // Update the buffer with the new data
+		CleanBinds(); // Bind the textures and draw the quads
+		RenderStart(); // Reset the buffer
 	}
-	//	texture_size = rendQuad;
+
 	float textureIndex = 0.0f;
 
 	// Checks if Texture is already bound and being used by another quad
@@ -250,13 +251,31 @@ void Renderer::CheckQuads(const glm::vec2& position, const glm::vec2& size, uint
 	float x = (2.0f * position.x) / windowWidth - 1.0f;
 	float y = 1.0f - (2.0f * position.y) / windowHeight;
 
-	DrawQuad(textureIndex, { x, y }, { 0.0f, 0.0f }, scale); // Lower Left
-	DrawQuad(textureIndex, { x + size.x, y }, { 1.0f, 0.0f }, scale); // Lower Right
-	DrawQuad(textureIndex, { x + size.x, y + size.y }, { 1.0f, 1.0f }, scale); // UpPer Right
-	DrawQuad(textureIndex, { x, y + size.y }, { 0.0f, 1.0f }, scale); // Upper Left
+	float halfWidth = size.x * renderSize.x * 0.5f;
+	float halfHeight = size.y * renderSize.y * 0.5f;
+
+	for (size_t i = 0; i < 4; i++)
+	{
+		// Translate vertex position to the center of the sprite
+		float xOffset = (size.x * renderSize.x) * (i == 1 || i == 2) - halfWidth;
+		float yOffset = (size.y * renderSize.y) * (i == 2 || i == 3) - halfHeight;
+
+		// Apply rotation to the translated vertex positions
+		float rotatedX = xOffset * cos(rotationAngle) - yOffset * sin(rotationAngle);
+		float rotatedY = xOffset * sin(rotationAngle) + yOffset * cos(rotationAngle);
+
+		// Translate vertex position back to the original position
+		rData.QuadBufferPtr->Position = { x + rotatedX + halfWidth, y + rotatedY + halfHeight,  0.0f };
+		rData.QuadBufferPtr->Color = { 1.0f,  1.0f,  1.0f };
+		rData.QuadBufferPtr->TexCoord = { UVs[i].x, UVs[i].y };
+		rData.QuadBufferPtr->TexID = textureIndex;
+		rData.QuadBufferPtr++;
+	}
 
 	rData.IndexCount += 6;
 }
+
+
 
 //Draw based on UV's
 void Renderer::DrawQuad(float textureIndex, const glm::vec2& position, const glm::vec2& texCoord, const Vector2D& scale)
@@ -266,4 +285,30 @@ void Renderer::DrawQuad(float textureIndex, const glm::vec2& position, const glm
 	rData.QuadBufferPtr->TexCoord = { texCoord.x * scale.x, texCoord.y * scale.y };
 	rData.QuadBufferPtr->TexID = textureIndex;
 	rData.QuadBufferPtr++;
+}
+
+std::array<Vector2D, 4> Renderer::CalculateRotatedUVs(float angle, std::array<Vector2D, 4> UVs)
+{
+	
+	// Calculate sine and cosine of the angle
+	float cosAngle = cos(angle);
+	float sinAngle = sin(angle);
+
+	// Rotate UV coordinates
+	for (auto& uv : UVs)
+	{
+		// Translate UV coordinate to the origin (0,0)
+		float xTranslated = uv.x - 0.5f;
+		float yTranslated = uv.y - 0.5f;
+
+		// Apply rotation
+		float xRotated = xTranslated * cosAngle - yTranslated * sinAngle;
+		float yRotated = xTranslated * sinAngle + yTranslated * cosAngle;
+
+		// Translate UV coordinate back to its original position
+		uv.x = xRotated + 0.5f;
+		uv.y = yRotated + 0.5f;
+	}
+
+	return UVs;
 }

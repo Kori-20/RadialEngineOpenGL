@@ -11,25 +11,20 @@ float bulletCD = 0;
 PlayerShip::PlayerShip() : Pawn()
 {
 	AddTag(Player);
-	transform->SetPosition(360, 500);
+	transform->SetPosition(60, 300);
+	transform->SetRotation(90.f);
+
 	speed = Vector2D(450, 450);
 
 	overlapBox = &AddComponent<BoxCollision>(Vector2D(20, 30));
 	overlapBox->SetFilterMasking(PlayerMask);
 	overlapBox->SetFilterCollision(PlayerF);
 
-	/*
-	colliderBox = &AddComponent<BoxCollision>(Vector2D(10, 40));
-	colliderBox->SetFilterMasking(PlayerMask);
-	colliderBox->SetFilterCollision(PlayerF);
-	colliderBox->_sensor = false;
-	*/
-
 	myRb = &AddComponent<RigidBody>();
 	myRb->SetCollider(overlapBox);
 	myRb->afectedByGravity = false;
 
-	sprite = &AddComponent<SpriteComponent>("Assets/PULife.bmp", .2, .2, 1);//new openGl sprite
+	sprite = &AddComponent<SpriteComponent>("Assets/PULife.bmp", .2, .2, 1);
 	SetLayer(90);
 	sprite->numberOfCollums= 1;
 	sprite->numberOfRows = 1;
@@ -63,6 +58,8 @@ void PlayerShip::OnOverlapBegin(GameObject* obj)
 void PlayerShip::Update(float deltaTime)
 {
 	Pawn::Update(deltaTime);
+
+	Logger::Info(std::to_string(deltaTime));
 
 	//Quick bullet spam fix
 	if (!canShoot) 
@@ -154,7 +151,10 @@ void PlayerShip::Shoot()
 	if (canShoot)
 	{
 		//Logger::Warning("Shoot");
-		auto playerBullet = LevelManager::getInstance().InstantiateObject<Bullet>(Vector2D(transform->GetPosition().x + 30, transform->GetPosition().y + -55), *this);
+		auto playerBullet = LevelManager::getInstance().InstantiateObject<Bullet>(Vector2D(
+			transform->GetPosition().x + 55, 
+			transform->GetPosition().y + 0), *this);
+
 		playerBullet.pelletDamage = 10;
 		canShoot = false;
 	}

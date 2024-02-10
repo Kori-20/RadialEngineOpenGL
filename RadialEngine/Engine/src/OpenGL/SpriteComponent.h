@@ -21,7 +21,7 @@ class RE_API SpriteComponent : public Component
 
     bool Init() override;
     void Draw(float deltaTime) override;
-
+    void Update(float deltaTime) override;
     void SetSpritePath(const std::string& path);
     void SetSpriteRenderSize(const Vector2D& size);
 
@@ -31,7 +31,7 @@ class RE_API SpriteComponent : public Component
     int numberOfCollums = 1;
 
     std::array<Vector2D, 4> UVs;
-
+    std::array<Vector2D, 4> rotatedUVs;
     bool isAnimated = false;
 private:
     Transform* spriteTransform;

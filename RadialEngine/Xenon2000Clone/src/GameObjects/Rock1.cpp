@@ -5,7 +5,8 @@ float posChange = 0;
 
 Rock1::Rock1()
 {
-	transform->SetPosition(300, 50);
+	transform->SetPosition(660, 400);
+	
 	sprite = &AddComponent<SpriteComponent>("Assets/SAster96.bmp", 96.f/480, 96.f/480, 1);
 	sprite->numberOfCollums = 5;
 	sprite->numberOfRows = 5;
@@ -30,6 +31,9 @@ Rock1::~Rock1()
 void Rock1::Update(float deltaTime)
 {
 	GameObject::Update(deltaTime);
-	myRb->Move(Vector2D(0, 0.1f), rockSpeed);
+	myRb->Move(Vector2D(-0.1f, 0), rockSpeed);
+
+	float currentRotation = transform->GetRotation();
+	transform->SetRotation(currentRotation + rotationSpeed);
 }
 

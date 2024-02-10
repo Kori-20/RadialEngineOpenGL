@@ -17,6 +17,8 @@ Bullet::Bullet()
 	bulletRb = &AddComponent<RigidBody>();
 	bulletRb->afectedByGravity = false;
 	bulletRb->SetCollider(bulletBox);	
+
+	transform->SetRotation(90.f);
 }
 
 Bullet::~Bullet()
@@ -52,18 +54,19 @@ void Bullet::Update(float deltaTime)
 	GameObject::Update(deltaTime);
 	bulletlifeTime += deltaTime;
 
-	if (bulletlifeTime >= 2.5f)
+	if (bulletlifeTime >= 4.f)
 	{
 		Destroy();
 	}
 
-	//Vertical game
-	if (goUp) 
+	// Horizontal game
+	if (goRight)
 	{
-		bulletRb->Move(Vector2D(bulletRb->GetVelocity().x, -pelletSpeed), pelletSpeed);
+		bulletRb->Move(Vector2D(pelletSpeed, bulletRb->GetVelocity().y), pelletSpeed);
 	}
 	else
 	{
-		bulletRb->Move(Vector2D(bulletRb->GetVelocity().x, pelletSpeed), pelletSpeed);
+		bulletRb->Move(Vector2D(-pelletSpeed, bulletRb->GetVelocity().y), pelletSpeed);
 	}
+
 }

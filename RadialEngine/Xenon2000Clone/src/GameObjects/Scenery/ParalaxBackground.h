@@ -5,7 +5,7 @@
 class ParalaxBackground : public GameObject
 {
 public:
-	ParalaxBackground(const std::string& path,float w, float h, int s, float speed, float yPos);
+
 	ParalaxBackground();
 	~ParalaxBackground();
 
@@ -13,7 +13,6 @@ public:
 
 private:
 	SpriteComponent* paralLayerFront;
-	SpriteComponent* paralLayerBack;
 
 	float parallaxSpeed = 30;
 };

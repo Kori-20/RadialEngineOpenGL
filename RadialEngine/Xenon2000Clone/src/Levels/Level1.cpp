@@ -21,16 +21,16 @@ void Level1::OpenLevel()
 
 	PlayerShip* player = new PlayerShip();
 
-	TestEnemy* enemy1 = new TestEnemy(100, 200);
-	TestEnemy* enemy2 = new TestEnemy(200, 200);
+	TestEnemy* enemy1 = new TestEnemy(600, 100);
+	TestEnemy* enemy2 = new TestEnemy(600, 200);
 
-	TestEnemy* enemy3 = new TestEnemy(300, 400);
+	TestEnemy* enemy3 = new TestEnemy(500, 300);
 	enemy3->move = false;
-	TestEnemy* enemy4 = new TestEnemy(400, 400);
+	TestEnemy* enemy4 = new TestEnemy(500, 400);
 	enemy4->move = false;
 
-	TestEnemy* enemy5 = new TestEnemy(500, 200);
-	TestEnemy* enemy6 = new TestEnemy(600, 200);
+	TestEnemy* enemy5 = new TestEnemy(600, 500);
+	TestEnemy* enemy6 = new TestEnemy(600, 600);
 
 	Rock1* rock1 = new Rock1();
 }

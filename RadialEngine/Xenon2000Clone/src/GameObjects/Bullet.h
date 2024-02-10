@@ -27,7 +27,7 @@ protected:
 
 	
 	int pelletSpeed = 10000;
-	bool goUp = true;
+	bool goRight = true;
 
 	float bulletlifeTime = 0;
 };

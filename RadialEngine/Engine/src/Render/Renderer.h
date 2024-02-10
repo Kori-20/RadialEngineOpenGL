@@ -24,7 +24,8 @@ public:
 
 	static void LinkAtributes(GLuint ID, GLuint layout, GLuint numComponents, GLenum type, GLsizei stride, const void* offset);
 	static void CheckQuads(const glm::vec2& position, const glm::vec2& size, uint32_t textureID, const Vector2D& scale, const std::array<Vector2D, 4>& UVs);
-	static void CheckQuads(const glm::vec2& position, const glm::vec2& size, uint32_t textureID, const Vector2D& scale);
+	static void CheckQuads(const glm::vec2& position, const glm::vec2& size, uint32_t textureID, const Vector2D& renderSize, const std::array<Vector2D, 4>& UVs, float rotationAngle);
 	static void DrawQuad(float textureIndex, const glm::vec2& position, const glm::vec2& texCoord, const Vector2D& rendQuad);
+	static std::array<Vector2D, 4> CalculateRotatedUVs(float angle, std::array<Vector2D, 4> UVs);
 };
 

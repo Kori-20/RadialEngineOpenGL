@@ -15,7 +15,6 @@
 //TODO: Make window size and title configurable game side
 
 //Static variables
-float EngineCore::m_deltaTime = 0.0f;
 EngineCore* EngineCore::m_engine = nullptr;
 SDL_Event EngineCore::_sdlEvent;
 
@@ -27,6 +26,9 @@ EngineCore::EngineCore()
 void EngineCore::Initialize()
 {
 	Logger::Info("Engine initializing...");
+
+	frameDelay = 1000 / maxFPS;
+
 	/******************************************************************/
 	gameWindow = new Window("Xenon2000Clone", 800, 600, false);
 	/******************************************************************/
@@ -74,8 +76,7 @@ void EngineCore::Start()
 	bool isRunning = true;
 
 	//Frame rate
-	lockFPS = 1000 / maxFPS;
-	m_TicksCount = SDL_GetTicks();
+	frameStart = SDL_GetTicks();
 
 	//Level setup
 	LevelManager::getInstance().GetCurrentLevel()->Start();
@@ -107,39 +108,34 @@ void EngineCore::EventHandler()
 
 void EngineCore::Update()
 {
-	//Frame rate
-	Uint64 currentTicks = SDL_GetPerformanceCounter();
-	m_deltaTime = static_cast<float>(currentTicks - m_TicksCount) / SDL_GetPerformanceFrequency();
-	m_TicksCount = currentTicks;
-	targetDeltaTime = 1.0f / static_cast<float>(maxFPS);// Limit frame rate
-	/******************************************************************/
-	//Update game logic
-	PhysicsWorld::GetInstance()->Update(targetDeltaTime);
-	LevelManager::getInstance().GetCurrentLevel()->Update(m_deltaTime);
-	LevelManager::getInstance().GetCurrentLevel()->LateUpdate(m_deltaTime);
+	// Update game logic
+	PhysicsWorld::GetInstance()->Update(deltaTime);
+	LevelManager::getInstance().GetCurrentLevel()->Update(deltaTime);
+	LevelManager::getInstance().GetCurrentLevel()->LateUpdate(deltaTime);
 
-	gameWindow->UpdateWindow(m_deltaTime);
-	/******************************************************************/
-	if (m_deltaTime < targetDeltaTime)//Frame rate lock (if frame rate is too fast, delay the frame)
+	gameWindow->UpdateWindow(deltaTime);
+
+	if (frameDelay > deltaTime)
 	{
-		SDL_Delay(static_cast<Uint32>((targetDeltaTime - m_deltaTime) * 1000));
-		currentTicks = SDL_GetPerformanceCounter(); // Update currentTicks after the delay
-		m_deltaTime = static_cast<float>(currentTicks - m_TicksCount) / SDL_GetPerformanceFrequency();
-		m_TicksCount = currentTicks;
+		SDL_Delay(frameDelay - deltaTime);
+		
 	}
-	/******************************************************************/
+	currentTime = SDL_GetTicks();
+	deltaTime = 1.f / static_cast<float>(maxFPS);
+	frameStart = currentTime;
+
 	DisplayFPS();
 }
 
+
 void EngineCore::Draw()
 {
-	PhysicsWorld::GetInstance()->DebugDraw(targetDeltaTime);
+	PhysicsWorld::GetInstance()->DebugDraw(deltaTime);
 
 	//OpenGl rendering logic
 	glClear(GL_COLOR_BUFFER_BIT);
 	Renderer::RenderStart();
-	LevelManager::getInstance().GetCurrentLevel()->Draw(targetDeltaTime);
-
+	LevelManager::getInstance().GetCurrentLevel()->Draw(deltaTime);
 	
 	TextUI::GetInstance()->PrintSreen(std::to_string(roundedFPS), 765, 600, Vector2D(.4f, .4f), 700);
 

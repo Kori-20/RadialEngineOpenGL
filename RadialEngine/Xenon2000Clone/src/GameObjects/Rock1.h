@@ -20,7 +20,7 @@ protected:
 	BoxCollision* overlapBox;
 
 private:
-
+	float rotationSpeed = .6f;
 	float rockSpeed = 30.f;
 };
 

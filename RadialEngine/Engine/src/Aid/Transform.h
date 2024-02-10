@@ -108,7 +108,7 @@ class Transform : public Component
 protected:
 	Vector2D t_Position = Vector2D::One();
 	Vector2D t_Scale = Vector2D::One();
-
+	float t_Rotation;
 public:
 	Transform() = default;
 	Transform(float x, float y, float xS, float yS) : t_Position(x, y), t_Scale(xS, yS) {}
@@ -123,6 +123,12 @@ public:
 	inline Vector2D& GetScale() { return t_Scale; }
 	inline void SetScale(const Vector2D& newScale) { t_Scale = newScale; }
 	inline void SetScale(float xScale, float yScale) { t_Scale = Vector2D(xScale, yScale); }
+
+	float GetRotation() const { return  t_Rotation; }
+
+	void SetRotation(float angle) { t_Rotation = angle; }
+
+	
 
 	// Placeholder for actual WorldToLocal implementation
 	static Transform& WorldToLocal(Transform Local, Transform Base) { return Local; }

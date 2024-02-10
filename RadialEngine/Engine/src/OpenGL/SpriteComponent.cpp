@@ -65,10 +65,21 @@ void SpriteComponent::Draw(float deltaTime)
 			UVs = std::array<Vector2D, 4>{
 				{Vector2D(0.0f, 0.0f), Vector2D(spriteWidth, 0.0f), Vector2D(spriteWidth, spriteHeight), Vector2D(0.0f, spriteHeight)}};
 		}
+	//	rotatedUVs = Renderer::CalculateRotatedUVs(90.f, UVs);
+
+		const auto rotationDegrees = spriteTransform->GetRotation();
+		const auto rotationRadians = rotationDegrees * DEG_TO_RAD;
 
 		//Send image to render
-		Renderer::CheckQuads({ xpos,ypos }, { spriteScale.x,spriteScale.y }, spriteTextureID, spriteRenderSize, UVs);
+		//radians minus, so that the image rotates clockwise
+		Renderer::CheckQuads({ xpos,ypos }, { spriteScale.x,spriteScale.y }, spriteTextureID, spriteRenderSize, UVs, -rotationRadians);
 	}
+}
+
+void SpriteComponent::Update(float deltaTime)
+{
+	Component::Update(deltaTime);
+
 }
 
 void SpriteComponent::SetSpritePath(const std::string& path)
