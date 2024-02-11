@@ -132,8 +132,6 @@ public:
 
 	// Placeholder for actual WorldToLocal implementation
 	static Transform& WorldToLocal(Transform Local, Transform Base) { return Local; }
-
-	int banana;
 };
 
 
