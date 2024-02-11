@@ -21,6 +21,7 @@ Rock1::Rock1()
 	myRb->SetCollider(overlapBox);
 	myRb->afectedByGravity = false;
 	myRb->bodyType = EBodyType::KinematicB;
+	SetLayer(15);
 }
 
 Rock1::~Rock1()

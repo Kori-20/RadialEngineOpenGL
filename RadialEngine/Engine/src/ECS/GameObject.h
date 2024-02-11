@@ -25,7 +25,7 @@ public:
 	GameObject(Vector2D pos);
 	GameObject(float x, float y);
 
-	~GameObject();
+	virtual ~GameObject();
 
 	virtual void Init() override;
 	virtual void Start() override;
@@ -43,6 +43,9 @@ public:
 	void SetID(int id) { ID = id; }
 	int GetID() { return ID; }
 
+	void MarkForRemoval() { markedForRemoval = true; }
+	bool IsMarkedForRemoval() const { return markedForRemoval; };
+
 private:
 	float rotation;
 	float scale = 1; //1 by default
@@ -55,6 +58,7 @@ private:
 	int ID = 0;
 
 	void ObjectSetup();
+	bool markedForRemoval = false;
 
 protected:
 	Transform* transform;

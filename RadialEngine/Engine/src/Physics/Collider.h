@@ -44,7 +44,7 @@ class RE_API Collider : public Component
 {
 public:
 	Collider() = default;
-	~Collider() override = default;
+	~Collider() override;
 
 	virtual b2Fixture* CreateFixture() = 0;
 	CollisionShape GetShape() const;

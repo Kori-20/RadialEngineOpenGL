@@ -38,9 +38,7 @@ void Bullet::OnOverlapBegin(GameObject* obj)
 		auto enemy = dynamic_cast<TestEnemy*>(obj);
 		enemy->TakeDamage(pelletDamage);
 
-		LevelManager::getInstance().GetCurrentLevel()->RemoveGameObject(this);
-
-		Destroy();
+		this->MarkForRemoval();
 	}
 }
 
@@ -56,7 +54,7 @@ void Bullet::Update(float deltaTime)
 
 	if (bulletlifeTime >= 4.f)
 	{
-		Destroy();
+		this->MarkForRemoval();
 	}
 
 	// Horizontal game

@@ -1,6 +1,11 @@
 #include "Collider.h"
 #include <Aid/Logger.h>
 
+Collider::~Collider()
+{
+
+}
+
 CollisionShape Collider::GetShape() const
 {
 	return colShape;

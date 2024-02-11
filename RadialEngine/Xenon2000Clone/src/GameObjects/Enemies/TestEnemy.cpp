@@ -56,7 +56,7 @@ void TestEnemy::TakeDamage(float damage)
 	{
 		hp = 0;
 		ScoreManager::GetInstance().AddScore(100);
-		LevelManager::getInstance().GetCurrentLevel()->RemoveGameObject(this);
+		this->MarkForRemoval();
 	}
 }
 

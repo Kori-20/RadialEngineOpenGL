@@ -81,6 +81,10 @@ public:
 
 	inline void Destroy()
 	{
+		for (const auto& comp : compGroup)
+		{
+			comp->isBeingDestroyed = true;
+		}
 		m_active = false;
 	}
 

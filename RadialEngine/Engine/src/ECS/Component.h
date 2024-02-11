@@ -16,7 +16,11 @@ public:
 	virtual void Update(float deltaTime) {}
 	virtual void OnDestroyed() {}
 
+	bool isBeingDestroyed = false;
+
 protected:
 	class Entity* owner;
+
+	
 };
 

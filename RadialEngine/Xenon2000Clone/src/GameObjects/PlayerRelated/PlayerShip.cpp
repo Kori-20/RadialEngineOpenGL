@@ -59,8 +59,6 @@ void PlayerShip::Update(float deltaTime)
 {
 	Pawn::Update(deltaTime);
 
-	Logger::Info(std::to_string(deltaTime));
-
 	//Quick bullet spam fix
 	if (!canShoot) 
 	{

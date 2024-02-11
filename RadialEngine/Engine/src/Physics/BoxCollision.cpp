@@ -15,6 +15,11 @@ BoxCollision::BoxCollision(Vector2D boxDimenssions)
 	SetBoxDimenssions(boxDimenssions);
 }
 
+BoxCollision::~BoxCollision()
+{
+
+}
+
 b2Fixture* BoxCollision::CreateFixture()
 {
 	RigidBody* rb = &GetOwner()->GetComponent<RigidBody>();

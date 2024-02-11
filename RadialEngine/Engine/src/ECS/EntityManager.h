@@ -27,6 +27,9 @@ public:
 	void AddEntity(GameObject* entity);
 	void RemoveEntity(GameObject* entity);
 	void ClearEntities();
+
+	void MarkForRemoval(GameObject* entity);
+	void RemoveMarkedEntities();
 	std::vector<GameObject*> getAllEntities() const;
 };
 

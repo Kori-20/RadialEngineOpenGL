@@ -12,6 +12,11 @@ void ContactListener::BeginContact(b2Contact* contact)
 	const auto colliderA = reinterpret_cast<Collider*>(contact->GetFixtureA()->GetUserData().pointer);
 	const auto colliderB = reinterpret_cast<Collider*>(contact->GetFixtureB()->GetUserData().pointer);
 
+ 	if (colliderA->isBeingDestroyed || colliderB->isBeingDestroyed)
+	{
+		return;
+	}
+
 	const auto objectOwnerA = dynamic_cast<GameObject*>(colliderA->GetOwner());
 	const auto objectOwnerB = dynamic_cast<GameObject*>(colliderB->GetOwner());
 
@@ -35,9 +40,14 @@ void ContactListener::BeginContact(b2Contact* contact)
 void ContactListener::EndContact(b2Contact* contact)
 {
 	b2ContactListener::EndContact(contact);
-	/*
+	
 	const auto colliderA = reinterpret_cast<Collider*>(contact->GetFixtureA()->GetUserData().pointer);
 	const auto colliderB = reinterpret_cast<Collider*>(contact->GetFixtureB()->GetUserData().pointer);
+
+	if (colliderA->isBeingDestroyed || colliderB->isBeingDestroyed)
+	{
+		return;
+	}
 
 	bool isCollisionEnabled = (contact->GetFixtureA()->GetFilterData().maskBits &
 		contact->GetFixtureA()->GetFilterData().categoryBits) != 0;
@@ -53,7 +63,6 @@ void ContactListener::EndContact(b2Contact* contact)
 			objectOwnerB->OnCollisionEnd(objectOwnerA);
 		}
 	}
-	*/
 }
 
 void ContactListener::PostSolve(b2Contact* contact, const b2ContactImpulse* impulse)

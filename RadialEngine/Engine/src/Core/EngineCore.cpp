@@ -65,7 +65,7 @@ void EngineCore::Initialize()
 	LevelManager::getInstance().GetCurrentLevel()->OpenLevel();
 	LevelManager::getInstance().GetCurrentLevel()->Init(); //Requires Level to be open
 	/******************************************************************/
-	Logger::Note("Engine initialized");
+	Logger::Info("Engine initialized");
 }
 
 void EngineCore::Start()
@@ -82,7 +82,7 @@ void EngineCore::Start()
 	LevelManager::getInstance().GetCurrentLevel()->Start();
 
 	/******************************************************************/
-	Logger::Note("Engine started");
+	Logger::Info("Engine started");
 }
 
 void EngineCore::EventHandler()
